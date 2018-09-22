@@ -175,6 +175,12 @@ namespace _2_01_Carreras
             {
                 NivelActual = Niveles.Seleccion;
             }
+            win = false;
+            lose = false;
+            Carro1 = false;
+            Carro2 = false;
+            Carro3 = false;
+            Carro4 = false;
         }
 
         private void SeleccionUpdate()
@@ -305,7 +311,11 @@ namespace _2_01_Carreras
 
         private void GameOverUpdate()
         {
-            
+            KeyboardState Kbs = Keyboard.GetState();
+            if (Kbs.IsKeyDown(Keys.Enter))
+            {
+                NivelActual = Niveles.Presentacion;
+            }
         }
 
         /// <summary>
@@ -386,7 +396,6 @@ namespace _2_01_Carreras
                 spriteBatch.Draw(tCar4, rCar, Color.White);
             }
             spriteBatch.Draw(tTaxi, rTaxi1, Color.White);
-            spriteBatch.DrawString(font, "Pos " +  rCar.Y, new Vector2(125, rCar.Y - 100), Color.White);
             spriteBatch.Draw(tTaxi, rTaxi2, Color.White);
             spriteBatch.Draw(tCarBlue, rCarBlue, Color.White);
             spriteBatch.Draw(tCamioneta, rCamioneta, Color.White);
@@ -400,11 +409,13 @@ namespace _2_01_Carreras
             spriteBatch.Begin();
             if (win)
             {
-                spriteBatch.DrawString(font, "YOU WIN", new Vector2(160, 125), Color.White);
+                spriteBatch.DrawString(font, "YOU WIN", new Vector2(105, 200), Color.White);
+                spriteBatch.DrawString(font2, "PRESS ENTER TO CONTINUE", new Vector2(145, 350), Color.White);
             }
             if (lose)
             {
-                spriteBatch.DrawString(font, "YOU LOSE", new Vector2(160, 125), Color.White);
+                spriteBatch.DrawString(font, "YOU LOSE", new Vector2(100, 200), Color.White);
+                spriteBatch.DrawString(font2, "PRESS ENTER TO CONTINUE", new Vector2(145, 350), Color.White);
             }
             spriteBatch.End();
         }
