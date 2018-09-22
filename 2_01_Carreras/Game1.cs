@@ -33,7 +33,7 @@ namespace _2_01_Carreras
         Rectangle rCar;
         const int ANCHO_CAR = 35;
         const int ALTO_CAR = 70;
-
+        int velCar = 3;
 
         //Enemies
         Texture2D tTaxi, tCamioneta, tCarBlue;
@@ -125,22 +125,31 @@ namespace _2_01_Carreras
             if (kbs.IsKeyDown(Keys.Right) && rCar.X + ANCHO_CAR < 400 )
                 rCar.X += 3;
 
-                rCar.Y -= 3;
+            if (kbs.IsKeyDown(Keys.Up) )
+                rCar.Y -= 1;
+            if (kbs.IsKeyDown(Keys.Down))
+                velCar = 1;
+            else
+                velCar = 3;
+
+
+            rCar.Y -= velCar;
 
             // Si el coche sale de la pantalla
             if(rTaxi2.Y > rCar.Y + ALTO_VP / 2)
             {
 
                 // Posicionar aleatoriamente en el sig bloque de carretera
-                rTaxi2.Y = -randRespawn.Next(-rCar.Y + ALTO_CAR + (ALTO_VP / 2), -rCar.Y + (ALTO_VP / 2 + ALTO_VP)- ALTO_CAR);
-                rTaxi2.X = randRespawn.Next(100, 400 - ANCHO_CAR);
-                //  intercecta con otro coche posicionado, 
-                /*if(rTaxi2.Intersects(rTaxi1) || rTaxi2.Intersects(rCamioneta) || rTaxi2.Intersects(rCarBlue))
+                rTaxi2.Y = -randRespawn.Next(-rCar.Y + ALTO_CAR + (ALTO_VP / 2), -rCar.Y + (ALTO_VP)- ALTO_CAR); 
+                rTaxi2.X = randRespawn.Next(120, 380 - ANCHO_CAR);
+
+                //  si intercecta con otro coche posicionado, 
+                if(rTaxi2.Intersects(rTaxi1) || rTaxi2.Intersects(rCamioneta) || rTaxi2.Intersects(rCarBlue))
                 {
                     //posicionar con base en el espacio reglamentario 
-                    rTaxi2.Y = -randRespawn.Next(-rCar.Y + ALTO_VP / 2, -rCar.Y + ALTO_VP);
-                    rTaxi2.X = randRespawn.Next(100, 400 - ANCHO_CAR);
-                }*/
+                    rTaxi2.Y = -randRespawn.Next(-rCar.Y + ALTO_CAR + (ALTO_VP / 2), -rCar.Y + (ALTO_VP) - ALTO_CAR);
+                    rTaxi2.X = randRespawn.Next(120, 380 - ANCHO_CAR);
+                }
             }
 
             if (rTaxi1.Y > rCar.Y + ALTO_VP / 2)
@@ -148,11 +157,15 @@ namespace _2_01_Carreras
 
                 // Posicionar aleatoriamente en el sig bloque de carretera
                 rTaxi1.Y = -randRespawn.Next(-rCar.Y + ALTO_CAR + (ALTO_VP / 2), -rCar.Y + (ALTO_VP / 2 + ALTO_VP) - ALTO_CAR);
-                rTaxi1.X = randRespawn.Next(100, 400 - ANCHO_CAR);
-                //  intercecta con otro coche posicionado, 
+                rTaxi1.X = randRespawn.Next(120, 380 - ANCHO_CAR);
+                //  si intercecta con otro coche posicionado, 
+                if (rTaxi1.Intersects(rTaxi2) || rTaxi1.Intersects(rCamioneta) || rTaxi1.Intersects(rCarBlue))
+                {
                     //posicionar con base en el espacio reglamentario 
+                    rTaxi1.Y = -randRespawn.Next(-rCar.Y + ALTO_CAR + (ALTO_VP / 2), -rCar.Y + (ALTO_VP) - ALTO_CAR);
+                    rTaxi1.X = randRespawn.Next(120, 380 - ANCHO_CAR);
+                }
 
-                
             }
 
             if (rCamioneta.Y > rCar.Y + ALTO_VP / 2)
@@ -160,10 +173,14 @@ namespace _2_01_Carreras
 
                 // Posicionar aleatoriamente en el sig bloque de carretera
                 rCamioneta.Y = -randRespawn.Next(-rCar.Y + ALTO_CAR + (ALTO_VP / 2), -rCar.Y + (ALTO_VP / 2 + ALTO_VP)- ALTO_CAR);
-                rCamioneta.X = randRespawn.Next(100, 400 - ANCHO_CAR);
-                //  intercecta con otro coche posicionado, 
+                rCamioneta.X = randRespawn.Next(120, 380 - ANCHO_CAR);
+
+                if (rCamioneta.Intersects(rTaxi1) || rCamioneta.Intersects(rTaxi2) || rCamioneta.Intersects(rCarBlue))
+                {
                     //posicionar con base en el espacio reglamentario 
-              
+                    rCamioneta.Y = -randRespawn.Next(-rCar.Y + ALTO_CAR + (ALTO_VP / 2), -rCar.Y + (ALTO_VP) - ALTO_CAR);
+                    rCamioneta.X = randRespawn.Next(120, 380 - ANCHO_CAR);
+                }
             }
 
             if (rCarBlue.Y > rCar.Y + ALTO_VP / 2)
@@ -171,15 +188,17 @@ namespace _2_01_Carreras
 
                 // Posicionar aleatoriamente en el sig bloque de carretera
                 rCarBlue.Y = -randRespawn.Next(-rCar.Y + ALTO_CAR + (ALTO_VP / 2), -rCar.Y + (ALTO_VP / 2 + ALTO_VP) - ALTO_CAR);
-                rCarBlue.X = randRespawn.Next(100, 400 - ANCHO_CAR);
-                //  intercecta con otro coche posicionado, //aafadfasdfadsfads
-                    //posicionar con base en el espacio reglamentario jhAGSJhasgJASGajsg
-                    //asdjasgdjasdg
-            }
-            if (true)
-            {
+                rCarBlue.X = randRespawn.Next(120, 380 - ANCHO_CAR);
 
+
+                if (rCarBlue.Intersects(rTaxi1) || rCarBlue.Intersects(rTaxi2) || rCarBlue.Intersects(rCamioneta))
+                {
+                    //posicionar con base en el espacio reglamentario 
+                    rCarBlue.Y = -randRespawn.Next(-rCar.Y + ALTO_CAR + (ALTO_VP / 2), -rCar.Y + (ALTO_VP) - ALTO_CAR);
+                    rCarBlue.X = randRespawn.Next(120, 380 - ANCHO_CAR);
+                }
             }
+        
 
             //6)Actualizar la camara
             camera.Update(new Vector2(rCar.X, rCar.Y));
