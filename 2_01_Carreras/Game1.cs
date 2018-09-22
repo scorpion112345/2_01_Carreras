@@ -222,7 +222,7 @@ namespace _2_01_Carreras
             rCar.Y -= velCar;
 
             // Si el coche sale de la pantalla
-            if (rTaxi2.Y > rCar.Y + ALTO_VP / 2 &&  rCar.Y > -ALTO_BG + ALTO_VP )
+            if (rTaxi2.Y > rCar.Y + ALTO_VP / 2 &&  rCar.Y > -ALTO_BG + ALTO_VP * 1.5 )
             {
                 // Posicionar aleatoriamente en el sig bloque de carretera
                 rTaxi2.Y = -randRespawn.Next(-rCar.Y + ALTO_CAR + (ALTO_VP / 2), -rCar.Y + (ALTO_VP) - ALTO_CAR);
@@ -237,7 +237,7 @@ namespace _2_01_Carreras
                 }
             }
 
-            if (rTaxi1.Y > rCar.Y + ALTO_VP / 2 && rCar.Y > -ALTO_BG + ALTO_VP)
+            if (rTaxi1.Y > rCar.Y + ALTO_VP / 2 && rCar.Y > -ALTO_BG + ALTO_VP * 1.5)
             {
 
                 rTaxi1.Y = -randRespawn.Next(-rCar.Y + ALTO_CAR + (ALTO_VP / 2), -rCar.Y + (ALTO_VP) - ALTO_CAR);
@@ -254,7 +254,7 @@ namespace _2_01_Carreras
 
             }
 
-            if (rCamioneta.Y > rCar.Y + ALTO_VP / 2 && rCar.Y > -ALTO_BG + ALTO_VP)
+            if (rCamioneta.Y > rCar.Y + ALTO_VP / 2 && rCar.Y > -ALTO_BG + ALTO_VP * 1.5)
             {
 
                 // Posicionar aleatoriamente en el sig bloque de carretera
@@ -271,7 +271,7 @@ namespace _2_01_Carreras
                 }
             }
 
-            if (rCarBlue.Y > rCar.Y + ALTO_VP / 2 && rCar.Y > -ALTO_BG + ALTO_VP )
+            if (rCarBlue.Y > rCar.Y + ALTO_VP / 2 && rCar.Y > -ALTO_BG + ALTO_VP * 1.5)
             { 
                 // Posicionar aleatoriamente en el sig bloque de carretera
                 rCarBlue.Y = -randRespawn.Next(-rCar.Y + ALTO_CAR + (ALTO_VP / 2), -rCar.Y + (ALTO_VP / 2 + ALTO_VP) - ALTO_CAR);
@@ -284,7 +284,6 @@ namespace _2_01_Carreras
                     rCarBlue.X = randRespawn.Next(120, 380 - ANCHO_CAR);
                 }
             }
-
 
             //Lose game
             if (rCar.Intersects(rTaxi1) || rCar.Intersects(rTaxi2) || rCar.Intersects(rCamioneta) || rCar.Intersects(rCarBlue))
@@ -387,6 +386,7 @@ namespace _2_01_Carreras
                 spriteBatch.Draw(tCar4, rCar, Color.White);
             }
             spriteBatch.Draw(tTaxi, rTaxi1, Color.White);
+            spriteBatch.DrawString(font, "Pos " +  rCar.Y, new Vector2(125, rCar.Y - 100), Color.White);
             spriteBatch.Draw(tTaxi, rTaxi2, Color.White);
             spriteBatch.Draw(tCarBlue, rCarBlue, Color.White);
             spriteBatch.Draw(tCamioneta, rCamioneta, Color.White);
