@@ -23,8 +23,8 @@ namespace _2_01_Carreras
         //2)Configurar escaneario
         const int ANCHO_BG = 500;
         const int ALTO_BG = 3000;
-        Texture2D tBg, tBgSelec;
-        Rectangle rBg, rBgSelec;
+        Texture2D tBg, tBgSelec, tBgInicio;
+        Rectangle rBg, rBgSelec, rBgInicio;
 
         //PLayer
         Texture2D tCar1, tCar2, tCar3, tCar4;
@@ -85,6 +85,7 @@ namespace _2_01_Carreras
             rCar = new Rectangle(ANCHO_VP / 2, ALTO_VP / 2, ANCHO_CAR, ALTO_CAR);
 
             rBgSelec = new Rectangle(0, 0, ANCHO_VP, ALTO_VP);
+            rBgInicio = new Rectangle(0, 0, ANCHO_VP, ALTO_VP);
 
             rCamioneta = new Rectangle((int)(ANCHO_VP * .3), (int)(-ALTO_VP * .3), ANCHO_CAR, ALTO_CAR);
             rTaxi1 = new Rectangle((int)(ANCHO_VP * .65), (int)(-ALTO_VP * .6), ANCHO_CAR, ALTO_CAR);
@@ -114,6 +115,7 @@ namespace _2_01_Carreras
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             tBg = Content.Load<Texture2D>("bgPista");
+            tBgInicio = Content.Load<Texture2D>("fondo2");
             tBgSelec = Content.Load<Texture2D>("fondospider");
             tCar1 = Content.Load<Texture2D>("CPolicia");
             tCar2 = Content.Load<Texture2D>("CAzul");
@@ -181,6 +183,16 @@ namespace _2_01_Carreras
             Carro2 = false;
             Carro3 = false;
             Carro4 = false;
+            rCar.Y = ALTO_VP / 2;
+            rCar.X = ANCHO_VP / 2;
+            rCamioneta.Y = (int)(-ALTO_VP * .3);
+            rCamioneta.X = (int)(ANCHO_VP * .3);
+            rTaxi1.Y = (int)(-ALTO_VP * .6);
+            rTaxi1.X = (int)(ANCHO_VP * .65);
+            rCarBlue.Y = (int)(-ALTO_VP * .9);
+            rCarBlue.X = (int)(ANCHO_VP * .40);
+            rTaxi2.Y = -(int)(2 * ALTO_VP * .1);
+            rTaxi2.X = (int)(ANCHO_VP * .60);
         }
 
         private void SeleccionUpdate()
@@ -348,10 +360,10 @@ namespace _2_01_Carreras
         private void PresentacionDraw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-            spriteBatch.Draw(tBgSelec, rBgSelec, Color.White);
-            spriteBatch.DrawString(font, "EXTREME", new Vector2(90, 190), Color.White);
-            spriteBatch.DrawString(font, "RACING", new Vector2(130, 250), Color.White);
-            spriteBatch.DrawString(font2, "PRESS SPACE TO START", new Vector2(150, 350), Color.White);
+            spriteBatch.Draw(tBgInicio, rBgInicio, Color.White);
+            spriteBatch.DrawString(font, "EXTREME", new Vector2(90, 190), Color.Firebrick);
+            spriteBatch.DrawString(font, "RACING", new Vector2(130, 250), Color.Firebrick);
+            spriteBatch.DrawString(font2, "PRESS SPACE TO START", new Vector2(150, 350), Color.Firebrick);
             spriteBatch.End();
         }
 
