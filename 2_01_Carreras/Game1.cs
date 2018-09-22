@@ -2,8 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-
-
 using TU_NAMESPACE;
 
 namespace _2_01_Carreras
@@ -25,8 +23,8 @@ namespace _2_01_Carreras
         //2)Configurar escaneario
         const int ANCHO_BG = 500;
         const int ALTO_BG = 3000;
-        Texture2D tBg;
-        Rectangle rBg;
+        Texture2D tBg, tBgSelec;
+        Rectangle rBg, rBgSelec;
 
         //PLayer
         Texture2D tCar1, tCar2, tCar3, tCar4;
@@ -40,7 +38,7 @@ namespace _2_01_Carreras
         Rectangle rTaxi1, rTaxi2, rCamioneta, rCarBlue;
 
         //Fonts
-        private SpriteFont font;
+        private SpriteFont font, font2;
 
         //Banderas
         bool Carro1 = false;
@@ -84,6 +82,8 @@ namespace _2_01_Carreras
             rBg = new Rectangle(0, -ALTO_BG + ALTO_VP, ANCHO_BG, ALTO_BG);
             rCar = new Rectangle(ANCHO_VP / 2, ALTO_VP / 2, ANCHO_CAR, ALTO_CAR);
 
+            rBgSelec = new Rectangle(0, 0, ANCHO_VP, ALTO_VP);
+
             rCamioneta = new Rectangle((int)(ANCHO_VP * .3), (int)(-ALTO_VP * .3), ANCHO_CAR, ALTO_CAR);
             rTaxi1 = new Rectangle((int)(ANCHO_VP * .65), (int)(-ALTO_VP * .6), ANCHO_CAR, ALTO_CAR);
             rCarBlue = new Rectangle((int)(ANCHO_VP * .40), (int)(-ALTO_VP * .9), ANCHO_CAR, ALTO_CAR);
@@ -112,6 +112,7 @@ namespace _2_01_Carreras
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             tBg = Content.Load<Texture2D>("bgPista");
+            tBgSelec = Content.Load<Texture2D>("fondospider");
             tCar1 = Content.Load<Texture2D>("CPolicia");
             tCar2 = Content.Load<Texture2D>("CAzul");
             tCar3 = Content.Load<Texture2D>("CDepor");
@@ -119,7 +120,8 @@ namespace _2_01_Carreras
             tCamioneta = Content.Load<Texture2D>("CCamioneta");
             tTaxi = Content.Load<Texture2D>("CTaxi");
             tCarBlue = Content.Load<Texture2D>("CCarBlue");
-            font = Content.Load<SpriteFont>("instrucciones");
+            font = Content.Load<SpriteFont>("titulo");
+            font2 = Content.Load<SpriteFont>("instrucciones");
 
 
 
@@ -303,22 +305,25 @@ namespace _2_01_Carreras
         private void PresentacionDraw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-            spriteBatch.DrawString(font, "CARRERAS", new Vector2(150, 245), Color.White);
-            spriteBatch.DrawString(font, "PRESS SPACE TO START", new Vector2(150, 290), Color.White);
+            spriteBatch.Draw(tBgSelec, rBgSelec, Color.White);
+            spriteBatch.DrawString(font, "EXTREME", new Vector2(90, 190), Color.White);
+            spriteBatch.DrawString(font, "RACING", new Vector2(130, 250), Color.White);
+            spriteBatch.DrawString(font2, "PRESS SPACE TO START", new Vector2(150, 350), Color.White);
             spriteBatch.End();
         }
 
         private void SeleccionDraw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-            spriteBatch.DrawString(font, "SELECT YOUR CAR", new Vector2(160, 125), Color.White);
-            spriteBatch.DrawString(font, "PRESS 1 TO SELECT", new Vector2(80, 215), Color.White);
+            spriteBatch.Draw(tBgSelec, rBgSelec, Color.White);
+            spriteBatch.DrawString(font2, "SELECT YOUR CAR", new Vector2(170, 115), Color.White);
+            spriteBatch.DrawString(font2, "PRESS 1 TO SELECT", new Vector2(80, 215), Color.White);
             spriteBatch.Draw(tCar1, rCar1, Color.White);
-            spriteBatch.DrawString(font, "PRESS 2 TO SELECT", new Vector2(80, 315), Color.White);
+            spriteBatch.DrawString(font2, "PRESS 2 TO SELECT", new Vector2(80, 315), Color.White);
             spriteBatch.Draw(tCar2, rCar2, Color.White);
-            spriteBatch.DrawString(font, "PRESS 3 TO SELECT", new Vector2(80, 415), Color.White);
+            spriteBatch.DrawString(font2, "PRESS 3 TO SELECT", new Vector2(80, 415), Color.White);
             spriteBatch.Draw(tCar3, rCar3, Color.White);
-            spriteBatch.DrawString(font, "PRESS 4 TO SELECT", new Vector2(80, 515), Color.White);
+            spriteBatch.DrawString(font2, "PRESS 4 TO SELECT", new Vector2(80, 515), Color.White);
             spriteBatch.Draw(tCar4, rCar4, Color.White);
             spriteBatch.End();
         }
