@@ -239,12 +239,23 @@ namespace _2_01_Carreras
 
             rCar.Y -= velCar;
 
+            if (rTaxi1.Y > rCar.Y + ALTO_VP / 2 && rCar.Y > -ALTO_BG + ALTO_VP * 1.5)
+            {
+                PosCar(ref rTaxi1);
+
+                //  si intercecta con otro coche posicionado, 
+                if (rTaxi1.Intersects(rTaxi2) || rTaxi1.Intersects(rCamioneta) || rTaxi1.Intersects(rCarBlue))
+                {
+                    //posicionar de nuevo
+                    rTaxi1.Y = -randRespawn.Next(-rCar.Y + ALTO_CAR + (ALTO_VP / 2), -rCar.Y + (ALTO_VP) - ALTO_CAR);
+                    rTaxi1.X = randRespawn.Next(120, 380 - ANCHO_CAR);
+                }
+            }
+
             // Si el coche sale de la pantalla
             if (rTaxi2.Y > rCar.Y + ALTO_VP / 2 &&  rCar.Y > -ALTO_BG + ALTO_VP * 1.5 )
             {
-                // Posicionar aleatoriamente en el sig bloque de carretera
-                rTaxi2.Y = -randRespawn.Next(-rCar.Y + ALTO_CAR + (ALTO_VP / 2), -rCar.Y + (ALTO_VP) - ALTO_CAR);
-                rTaxi2.X = randRespawn.Next(120, 380 - ANCHO_CAR);
+                PosCar(ref rTaxi2);
 
                 //posicionar de nuevo
                 if (rTaxi2.Intersects(rTaxi1) || rTaxi2.Intersects(rCamioneta) || rTaxi2.Intersects(rCarBlue))
@@ -255,31 +266,13 @@ namespace _2_01_Carreras
                 }
             }
 
-            if (rTaxi1.Y > rCar.Y + ALTO_VP / 2 && rCar.Y > -ALTO_BG + ALTO_VP * 1.5)
-            {
 
-                rTaxi1.Y = -randRespawn.Next(-rCar.Y + ALTO_CAR + (ALTO_VP / 2), -rCar.Y + (ALTO_VP) - ALTO_CAR);
-                rTaxi1.X = randRespawn.Next(120, 380 - ANCHO_CAR);
-
-                //  si intercecta con otro coche posicionado, 
-                if (rTaxi1.Intersects(rTaxi2) || rTaxi1.Intersects(rCamioneta) || rTaxi1.Intersects(rCarBlue))
-                {
-                    //posicionar de nuevo
-                    rTaxi1.Y = -randRespawn.Next(-rCar.Y + ALTO_CAR + (ALTO_VP / 2), -rCar.Y + (ALTO_VP) - ALTO_CAR);
-                    rTaxi1.X = randRespawn.Next(120, 380 - ANCHO_CAR);
-                }
-
-
-            }
 
             if (rCamioneta.Y > rCar.Y + ALTO_VP / 2 && rCar.Y > -ALTO_BG + ALTO_VP * 1.5)
             {
 
                 // Posicionar aleatoriamente en el sig bloque de carretera
-                rCamioneta.Y = -randRespawn.Next(-rCar.Y + ALTO_CAR + (ALTO_VP / 2), -rCar.Y + (ALTO_VP / 2 + ALTO_VP)- ALTO_CAR);
-                rCamioneta.X = randRespawn.Next(100, 400 - ANCHO_CAR);
-                //  intercecta con otro coche posicionado, 
-                rCamioneta.X = randRespawn.Next(120, 380 - ANCHO_CAR);
+                PosCar(ref rCamioneta);
 
                 if (rCamioneta.Intersects(rTaxi1) || rCamioneta.Intersects(rTaxi2) || rCamioneta.Intersects(rCarBlue))
                 {
@@ -291,9 +284,7 @@ namespace _2_01_Carreras
 
             if (rCarBlue.Y > rCar.Y + ALTO_VP / 2 && rCar.Y > -ALTO_BG + ALTO_VP * 1.5)
             { 
-                // Posicionar aleatoriamente en el sig bloque de carretera
-                rCarBlue.Y = -randRespawn.Next(-rCar.Y + ALTO_CAR + (ALTO_VP / 2), -rCar.Y + (ALTO_VP / 2 + ALTO_VP) - ALTO_CAR);
-                rCarBlue.X = randRespawn.Next(120, 380 - ANCHO_CAR);
+                PosCar(ref rCarBlue);
 
                 if (rCarBlue.Intersects(rTaxi1) || rCarBlue.Intersects(rTaxi2) || rCarBlue.Intersects(rCamioneta))
                 {
@@ -320,7 +311,14 @@ namespace _2_01_Carreras
             camera.Update(new Vector2(rCar.X, rCar.Y));
         }
 
+        private void PosCar(ref Rectangle coche)
+        {
+            // Posicionar aleatoriamente en el sig bloque de carretera
+            coche.Y = -randRespawn.Next(-rCar.Y + ALTO_CAR + (ALTO_VP / 2), -rCar.Y + (ALTO_VP) - ALTO_CAR);
+            coche.X = randRespawn.Next(120, 380 - ANCHO_CAR);
 
+
+        }
         private void GameOverUpdate()
         {
             KeyboardState Kbs = Keyboard.GetState();
