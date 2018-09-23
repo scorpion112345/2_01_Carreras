@@ -352,7 +352,7 @@ namespace _2_01_Carreras
             spriteBatch.Draw(tBgInicio, rBgInicio, Color.White);
             spriteBatch.DrawString(font, "EXTREME", new Vector2(90, 190), Color.White);
             spriteBatch.DrawString(font, "RACING", new Vector2(130, 250), Color.White);
-            spriteBatch.DrawString(font2, "PRESS SPACE TO START", new Vector2(150, 350), Color.White);
+            spriteBatch.DrawString(font2, "PRESS SPACE TO START", new Vector2(140, 350), Color.White);
             spriteBatch.End();
         }
 
@@ -412,7 +412,7 @@ namespace _2_01_Carreras
             {
                 spriteBatch.Draw(tBgWinLose, rBgWinLose, Color.White);
                 spriteBatch.DrawString(font, "YOU WIN", new Vector2(105, 200), Color.White);
-                spriteBatch.DrawString(font2, "PRESS ENTER TO CONTINUE", new Vector2(125, 330), Color.White);
+                spriteBatch.DrawString(font2, "PRESS ENTER TO CONTINUE", new Vector2(115, 330), Color.White);
 
 
             }
@@ -420,7 +420,7 @@ namespace _2_01_Carreras
             {
                 spriteBatch.Draw(tBgWinLose, rBgWinLose, Color.White);
                 spriteBatch.DrawString(font, "YOU LOSE", new Vector2(100, 200), Color.White);
-                spriteBatch.DrawString(font2, "PRESS ENTER TO CONTINUE", new Vector2(125, 330), Color.White);
+                spriteBatch.DrawString(font2, "PRESS ENTER TO CONTINUE", new Vector2(115, 330), Color.White);
 
             }
             spriteBatch.End();
