@@ -177,3 +177,9 @@
 /processorParam:TextureFormat=Color
 /build:fondo2.jpg
 
+#begin SongIntroCar.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:SongIntroCar.mp3
+

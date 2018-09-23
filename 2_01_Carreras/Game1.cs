@@ -38,6 +38,10 @@ namespace _2_01_Carreras
         //Effect
         SoundEffect Fx;
 
+        //songs
+        Song SongIntro;
+        double TimeGameOver;
+
         //Enemies
         Texture2D tTaxi, tCamioneta, tCarBlue;
         Rectangle rTaxi1, rTaxi2, rCamioneta, rCarBlue;
@@ -131,6 +135,8 @@ namespace _2_01_Carreras
             font2 = Content.Load<SpriteFont>("instrucciones");
             Fx = Content.Load<SoundEffect>("choque");
 
+            SongIntro = Content.Load<Song>("SongIntroCar");
+
            // TODO: use this.Content to load your game content here
         }
 
@@ -153,6 +159,8 @@ namespace _2_01_Carreras
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+
+
             switch (NivelActual)
             {
                 case Niveles.Presentacion:
@@ -162,7 +170,7 @@ namespace _2_01_Carreras
                     SeleccionUpdate();
                     break;
                 case Niveles.EnJuego:
-                    EnJuegoUpdate();
+                    EnJuegoUpdate(gameTime);
                     break;
                 case Niveles.GameOver:
                     GameOverUpdate();
@@ -173,6 +181,11 @@ namespace _2_01_Carreras
 
         private void PresentacionUpdate()
         {
+            if (MediaPlayer.State == MediaState.Stopped)
+            {
+                MediaPlayer.Play(SongIntro);
+            }
+
             KeyboardState Kbs = Keyboard.GetState();
             if (Kbs.IsKeyDown(Keys.Space))
             {
@@ -218,29 +231,31 @@ namespace _2_01_Carreras
             if (Kbs.IsKeyDown(Keys.D1) || Kbs.IsKeyDown(Keys.D2) || Kbs.IsKeyDown(Keys.D3) || Kbs.IsKeyDown(Keys.D4))
             {
                 NivelActual = Niveles.EnJuego;
+                MediaPlayer.Stop();
+
             }
         }
 
-        private void EnJuegoUpdate()
+        private void EnJuegoUpdate( GameTime gameTime)
         {
             // controles
-            KeyboardState kbs = Keyboard.GetState();
-            if (kbs.IsKeyDown(Keys.Left) && rCar.X > 100)
-                rCar.X -= 3;
-            if (kbs.IsKeyDown(Keys.Right) && rCar.X + ANCHO_CAR < 400)
-                rCar.X += 3;
+           
+                KeyboardState kbs = Keyboard.GetState();
+                if (kbs.IsKeyDown(Keys.Left) && rCar.X > 100)
+                    rCar.X -= 3;
+                if (kbs.IsKeyDown(Keys.Right) && rCar.X + ANCHO_CAR < 400)
+                    rCar.X += 3;
 
-            if (kbs.IsKeyDown(Keys.Up))
-                rCar.Y -= 1;
-            if (kbs.IsKeyDown(Keys.Down))
-                velCar = 1;
-            else
-                velCar = 3;
+                if (kbs.IsKeyDown(Keys.Up))
+                    rCar.Y -= 1;
+                if (kbs.IsKeyDown(Keys.Down))
+                    velCar = 1;
+                
+                rCar.Y -= velCar;
+            
 
 
-            rCar.Y -= velCar;
-
-            if (rTaxi1.Y > rCar.Y + ALTO_VP / 2 && rCar.Y > -ALTO_BG + ALTO_VP * 1.5)
+            if (rTaxi1.Y > rCar.Y + ALTO_VP / 2 && rCar.Y > -ALTO_BG + ALTO_VP * 2)
             {
                 PosCar(ref rTaxi1);
 
@@ -254,7 +269,7 @@ namespace _2_01_Carreras
             }
 
             // Si el coche sale de la pantalla
-            if (rTaxi2.Y > rCar.Y + ALTO_VP / 2 &&  rCar.Y > -ALTO_BG + ALTO_VP * 1.5 )
+            if (rTaxi2.Y > rCar.Y + ALTO_VP / 2 &&  rCar.Y > -ALTO_BG + ALTO_VP * 2)
             {
                 PosCar(ref rTaxi2);
 
@@ -269,7 +284,7 @@ namespace _2_01_Carreras
 
 
 
-            if (rCamioneta.Y > rCar.Y + ALTO_VP / 2 && rCar.Y > -ALTO_BG + ALTO_VP * 1.5)
+            if (rCamioneta.Y > rCar.Y + ALTO_VP / 2 && rCar.Y > -ALTO_BG + ALTO_VP * 2)
             {
 
                 // Posicionar aleatoriamente en el sig bloque de carretera
@@ -283,7 +298,7 @@ namespace _2_01_Carreras
                 }
             }
 
-            if (rCarBlue.Y > rCar.Y + ALTO_VP / 2 && rCar.Y > -ALTO_BG + ALTO_VP * 1.5)
+            if (rCarBlue.Y > rCar.Y + ALTO_VP / 2 && rCar.Y > -ALTO_BG + ALTO_VP * 2)
             { 
                 PosCar(ref rCarBlue);
 
@@ -301,6 +316,7 @@ namespace _2_01_Carreras
                 lose = true;
                 Fx.Play();
                 NivelActual = Niveles.GameOver;
+
             }
 
             //Win game
