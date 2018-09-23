@@ -25,8 +25,8 @@ namespace _2_01_Carreras
         //2)Configurar escaneario
         const int ANCHO_BG = 500;
         const int ALTO_BG = 3000;
-        Texture2D tBg, tBgSelec, tBgInicio;
-        Rectangle rBg, rBgSelec, rBgInicio;
+        Texture2D tBg, tBgSelec, tBgInicio, tBgWinLose;
+        Rectangle rBg, rBgSelec, rBgInicio, rBgWinLose;
 
         //PLayer
         Texture2D tCar1, tCar2, tCar3, tCar4;
@@ -47,7 +47,7 @@ namespace _2_01_Carreras
         Rectangle rTaxi1, rTaxi2, rCamioneta, rCarBlue;
 
         //Fonts
-        private SpriteFont font, font2;
+        private SpriteFont font, font2, font3;
 
         //Banderas
         bool Carro1 = false;
@@ -77,6 +77,9 @@ namespace _2_01_Carreras
             //3) Adecuar la pantalla al viewport
             graphics.PreferredBackBufferHeight = ALTO_VP;
             graphics.PreferredBackBufferWidth = ANCHO_VP;
+
+            ReSetGame();
+
         }
 
         /// <summary>
@@ -93,6 +96,8 @@ namespace _2_01_Carreras
 
             rBgSelec = new Rectangle(0, 0, ANCHO_VP, ALTO_VP);
             rBgInicio = new Rectangle(0, 0, ANCHO_VP, ALTO_VP);
+            rBgWinLose = new Rectangle(0, 0, ANCHO_VP, ALTO_VP);
+
 
             rCamioneta = new Rectangle((int)(ANCHO_VP * .3), (int)(-ALTO_VP * .3), ANCHO_CAR, ALTO_CAR);
             rTaxi1 = new Rectangle((int)(ANCHO_VP * .65), (int)(-ALTO_VP * .6), ANCHO_CAR, ALTO_CAR);
@@ -124,6 +129,8 @@ namespace _2_01_Carreras
             tBg = Content.Load<Texture2D>("bgPista");
             tBgInicio = Content.Load<Texture2D>("fondo2");
             tBgSelec = Content.Load<Texture2D>("fondospider");
+            tBgWinLose = Content.Load<Texture2D>("BgGameWinCar2");
+
             tCar1 = Content.Load<Texture2D>("CPolicia");
             tCar2 = Content.Load<Texture2D>("CAzul");
             tCar3 = Content.Load<Texture2D>("CDepor");
@@ -132,7 +139,8 @@ namespace _2_01_Carreras
             tTaxi = Content.Load<Texture2D>("CTaxi");
             tCarBlue = Content.Load<Texture2D>("CCarBlue");
             font = Content.Load<SpriteFont>("titulo");
-            font2 = Content.Load<SpriteFont>("instrucciones");
+            font2 = Content.Load<SpriteFont>("FGeneral");
+
             Fx = Content.Load<SoundEffect>("choque");
 
             SongIntro = Content.Load<Song>("SongIntroCar");
@@ -191,6 +199,10 @@ namespace _2_01_Carreras
             {
                 NivelActual = Niveles.Seleccion;
             }
+        }
+
+        private void ReSetGame()
+        {
             win = false;
             lose = false;
             Carro1 = false;
@@ -236,113 +248,74 @@ namespace _2_01_Carreras
             }
         }
 
-        private void EnJuegoUpdate( GameTime gameTime)
+        private void EnJuegoUpdate(GameTime gameTime)
         {
             // controles
-           
-                KeyboardState kbs = Keyboard.GetState();
-                if (kbs.IsKeyDown(Keys.Left) && rCar.X > 100)
-                    rCar.X -= 3;
-                if (kbs.IsKeyDown(Keys.Right) && rCar.X + ANCHO_CAR < 400)
-                    rCar.X += 3;
 
-                if (kbs.IsKeyDown(Keys.Up))
-                    rCar.Y -= 1;
-                if (kbs.IsKeyDown(Keys.Down))
-                    velCar = 1;
-                
-                rCar.Y -= velCar;
-            
+            KeyboardState kbs = Keyboard.GetState();
+            if (kbs.IsKeyDown(Keys.Left) && rCar.X > 100)
+                rCar.X -= 3;
+            if (kbs.IsKeyDown(Keys.Right) && rCar.X + ANCHO_CAR < 400)
+                rCar.X += 3;
 
+            if (kbs.IsKeyDown(Keys.Up))
+                rCar.Y -= 1;
+            if (kbs.IsKeyDown(Keys.Down))
+                velCar = 1;
+            else
+                velCar = 3;
 
-            if (rTaxi1.Y > rCar.Y + ALTO_VP / 2 && rCar.Y > -ALTO_BG + ALTO_VP * 2)
-            {
-                PosCar(ref rTaxi1);
+            rCar.Y -= velCar;
 
-                //  si intercecta con otro coche posicionado, 
-                if (rTaxi1.Intersects(rTaxi2) || rTaxi1.Intersects(rCamioneta) || rTaxi1.Intersects(rCarBlue))
+            PosCar(ref rTaxi1);
+            PosCar(ref rTaxi2);
+            PosCar(ref rCamioneta);
+            PosCar(ref rCarBlue);
+
+                //Lose game
+                if (rCar.Intersects(rTaxi1) || rCar.Intersects(rTaxi2) || rCar.Intersects(rCamioneta) || rCar.Intersects(rCarBlue))
                 {
-                    //posicionar de nuevo
-                    rTaxi1.Y = -randRespawn.Next(-rCar.Y + ALTO_CAR + (ALTO_VP / 2), -rCar.Y + (ALTO_VP) - ALTO_CAR);
-                    rTaxi1.X = randRespawn.Next(120, 380 - ANCHO_CAR);
+                    lose = true;
+                    Fx.Play();
+                    NivelActual = Niveles.GameOver;
+
+                }
+
+                //Win game
+                if (rCar.Y <= -2500)
+                {
+                    win = true;
+                    NivelActual = Niveles.GameOver;
+                }
+                //6)Actualizar la camara
+                camera.Update(new Vector2(rCar.X, rCar.Y));
+
+            }// FinEnJUego
+
+
+
+            private void PosCar(ref Rectangle coche)
+            {
+                if (coche.Y > rCar.Y + ALTO_VP / 2 && rCar.Y > -ALTO_BG + ALTO_VP * 2)
+                {
+                    // Posicionar aleatoriamente en el sig bloque de carretera
+                    coche.Y = -randRespawn.Next(-rCar.Y + ALTO_CAR + (ALTO_VP / 2), -rCar.Y + (ALTO_VP) - ALTO_CAR);
+                    coche.X = randRespawn.Next(120, 380 - ANCHO_CAR);
+                }
+                 if ((coche.Intersects(rTaxi1) || coche.Intersects(rCamioneta) || coche.Intersects(rCarBlue) || coche.Intersects(rTaxi2)) && !coche.Intersects(coche))
+                {
+                    coche.Y = -randRespawn.Next(-rCar.Y + ALTO_CAR + (ALTO_VP / 2), -rCar.Y + (ALTO_VP) - ALTO_CAR);
+                    coche.X = randRespawn.Next(120, 380 - ANCHO_CAR);
                 }
             }
 
-            // Si el coche sale de la pantalla
-            if (rTaxi2.Y > rCar.Y + ALTO_VP / 2 &&  rCar.Y > -ALTO_BG + ALTO_VP * 2)
-            {
-                PosCar(ref rTaxi2);
-
-                //posicionar de nuevo
-                if (rTaxi2.Intersects(rTaxi1) || rTaxi2.Intersects(rCamioneta) || rTaxi2.Intersects(rCarBlue))
-                {
-                    rTaxi2.Y = -randRespawn.Next(-rCar.Y + ALTO_CAR + (ALTO_VP / 2), -rCar.Y + (ALTO_VP) - ALTO_CAR);
-                    rTaxi2.X = randRespawn.Next(120, 380 - ANCHO_CAR);
-                
-                }
-            }
-
-
-
-            if (rCamioneta.Y > rCar.Y + ALTO_VP / 2 && rCar.Y > -ALTO_BG + ALTO_VP * 2)
-            {
-
-                // Posicionar aleatoriamente en el sig bloque de carretera
-                PosCar(ref rCamioneta);
-
-                if (rCamioneta.Intersects(rTaxi1) || rCamioneta.Intersects(rTaxi2) || rCamioneta.Intersects(rCarBlue))
-                {
-                    //posicionar de nuevo
-                    rCamioneta.Y = -randRespawn.Next(-rCar.Y + ALTO_CAR + (ALTO_VP / 2), -rCar.Y + (ALTO_VP) - ALTO_CAR);
-                    rCamioneta.X = randRespawn.Next(120, 380 - ANCHO_CAR);
-                }
-            }
-
-            if (rCarBlue.Y > rCar.Y + ALTO_VP / 2 && rCar.Y > -ALTO_BG + ALTO_VP * 2)
-            { 
-                PosCar(ref rCarBlue);
-
-                if (rCarBlue.Intersects(rTaxi1) || rCarBlue.Intersects(rTaxi2) || rCarBlue.Intersects(rCamioneta))
-                {
-                    //posicionar de nuevo
-                    rCarBlue.Y = -randRespawn.Next(-rCar.Y + ALTO_CAR + (ALTO_VP / 2), -rCar.Y + (ALTO_VP) - ALTO_CAR);
-                    rCarBlue.X = randRespawn.Next(120, 380 - ANCHO_CAR);
-                }
-            }
-
-            //Lose game
-            if (rCar.Intersects(rTaxi1) || rCar.Intersects(rTaxi2) || rCar.Intersects(rCamioneta) || rCar.Intersects(rCarBlue))
-            {
-                lose = true;
-                Fx.Play();
-                NivelActual = Niveles.GameOver;
-
-            }
-
-            //Win game
-            if (rCar.Y <= -2500)
-            {
-                win = true;
-                NivelActual = Niveles.GameOver;
-            }
-            //6)Actualizar la camara
-            camera.Update(new Vector2(rCar.X, rCar.Y));
-        }
-
-        private void PosCar(ref Rectangle coche)
-        {
-            // Posicionar aleatoriamente en el sig bloque de carretera
-            coche.Y = -randRespawn.Next(-rCar.Y + ALTO_CAR + (ALTO_VP / 2), -rCar.Y + (ALTO_VP) - ALTO_CAR);
-            coche.X = randRespawn.Next(120, 380 - ANCHO_CAR);
-
-
-        }
         private void GameOverUpdate()
         {
             KeyboardState Kbs = Keyboard.GetState();
             if (Kbs.IsKeyDown(Keys.Enter))
             {
                 NivelActual = Niveles.Presentacion;
+                ReSetGame();
             }
         }
 
@@ -437,13 +410,18 @@ namespace _2_01_Carreras
             spriteBatch.Begin();
             if (win)
             {
+                spriteBatch.Draw(tBgWinLose, rBgWinLose, Color.White);
                 spriteBatch.DrawString(font, "YOU WIN", new Vector2(105, 200), Color.White);
-                spriteBatch.DrawString(font2, "PRESS ENTER TO CONTINUE", new Vector2(145, 350), Color.White);
+                spriteBatch.DrawString(font2, "PRESS ENTER TO CONTINUE", new Vector2(125, 330), Color.White);
+
+
             }
             if (lose)
             {
+                spriteBatch.Draw(tBgWinLose, rBgWinLose, Color.White);
                 spriteBatch.DrawString(font, "YOU LOSE", new Vector2(100, 200), Color.White);
-                spriteBatch.DrawString(font2, "PRESS ENTER TO CONTINUE", new Vector2(145, 350), Color.White);
+                spriteBatch.DrawString(font2, "PRESS ENTER TO CONTINUE", new Vector2(125, 330), Color.White);
+
             }
             spriteBatch.End();
         }
