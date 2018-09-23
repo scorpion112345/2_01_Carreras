@@ -159,6 +159,12 @@
 /processorParam:TextureFormat=Color
 /build:fondospider.jpg
 
+#begin choque.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:choque.wav
+
 #begin fondo2.jpg
 /importer:TextureImporter
 /processor:TextureProcessor

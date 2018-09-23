@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 using System;
 using TU_NAMESPACE;
 
@@ -33,7 +35,8 @@ namespace _2_01_Carreras
         const int ALTO_CAR = 70;
         int velCar = 3;
 
-
+        //Effect
+        SoundEffect Fx;
 
         //Enemies
         Texture2D tTaxi, tCamioneta, tCarBlue;
@@ -126,11 +129,9 @@ namespace _2_01_Carreras
             tCarBlue = Content.Load<Texture2D>("CCarBlue");
             font = Content.Load<SpriteFont>("titulo");
             font2 = Content.Load<SpriteFont>("instrucciones");
+            Fx = Content.Load<SoundEffect>("choque");
 
-
-
-
-            // TODO: use this.Content to load your game content here
+           // TODO: use this.Content to load your game content here
         }
 
         /// <summary>
@@ -298,6 +299,7 @@ namespace _2_01_Carreras
             if (rCar.Intersects(rTaxi1) || rCar.Intersects(rTaxi2) || rCar.Intersects(rCamioneta) || rCar.Intersects(rCarBlue))
             {
                 lose = true;
+                Fx.Play();
                 NivelActual = Niveles.GameOver;
             }
 
@@ -359,9 +361,9 @@ namespace _2_01_Carreras
         {
             spriteBatch.Begin();
             spriteBatch.Draw(tBgInicio, rBgInicio, Color.White);
-            spriteBatch.DrawString(font, "EXTREME", new Vector2(90, 190), Color.Firebrick);
-            spriteBatch.DrawString(font, "RACING", new Vector2(130, 250), Color.Firebrick);
-            spriteBatch.DrawString(font2, "PRESS SPACE TO START", new Vector2(150, 350), Color.Firebrick);
+            spriteBatch.DrawString(font, "EXTREME", new Vector2(90, 190), Color.White);
+            spriteBatch.DrawString(font, "RACING", new Vector2(130, 250), Color.White);
+            spriteBatch.DrawString(font2, "PRESS SPACE TO START", new Vector2(150, 350), Color.White);
             spriteBatch.End();
         }
 
